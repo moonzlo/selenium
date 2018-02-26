@@ -8,8 +8,9 @@ import unittest, time, re
 
 
 class UntitledTestCase(unittest.TestCase):
+
     def setUp(self):
-        self.driver = webdriver.Firefox()
+        self.driver = webdriver.Firefox('D:\profile')
         self.driver.implicitly_wait(30)
         self.base_url = "https://www.katalon.com/"
         self.verificationErrors = []
@@ -17,7 +18,7 @@ class UntitledTestCase(unittest.TestCase):
 
     def test_untitled_test_case(self):
         driver = self.driver
-        driver.get("http://nnm-club.me/forum/portal.php?c=12&start=16")
+        driver.get("http://nnm-club.me/forum/portal.php?c=12&start=18")
         driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[1]").click()
         driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
         driver.back()
@@ -100,4 +101,5 @@ class UntitledTestCase(unittest.TestCase):
 
 
 if __name__ == "__main__":
+
     unittest.main()
