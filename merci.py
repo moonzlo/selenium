@@ -4,6 +4,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import unittest, time, re
 
 
@@ -11,63 +13,28 @@ class UntitledTestCase(unittest.TestCase):
 
     def setUp(self):
         self.driver = webdriver.Firefox('D:\profile')
-        self.driver.implicitly_wait(30)
+        self.driver.implicitly_wait(1)
         self.base_url = "https://www.katalon.com/"
         self.verificationErrors = []
         self.accept_next_alert = True
 
+
     def test_untitled_test_case(self):
         driver = self.driver
-        driver.get("http://nnm-club.me/forum/portal.php?c=12&start=18")
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[1]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[2]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[3]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[4]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[5]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[6]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[7]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[8]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[9]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[10]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[11]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[12]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[13]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[14]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[15]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])[16]").click()
-        driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-        driver.back()
-        driver.find_element_by_link_text(u"След.").click()
+        driver.get("http://nnm-club.me/forum/portal.php?c=19")
+        while True:
+
+            nums = int(1)
+            while nums != 16:
+                nums1 = '[' + str(nums) + ']'
+                driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])" + nums1).click()
+                nums += 1
+                try:
+                    driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
+                    driver.back()
+                except:
+                    driver.back()
+            driver.find_element_by_link_text(u"След.").click()
 
     def is_element_present(self, how, what):
         try:
