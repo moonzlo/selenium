@@ -21,20 +21,20 @@ class UntitledTestCase(unittest.TestCase):
 
     def test_untitled_test_case(self):
         driver = self.driver
-        driver.get("http://nnm-club.me/forum/portal.php?c=19")
+        driver.get("http://nnm-club.me/forum/portal.php?c=19") # Целевая страница с которой начинается перебор
         while True:
 
             nums = int(1)
-            while nums != 16:
+            while nums != 16: # На странице всего 16 постов, по этому цикл завершается после перебора всех 16ти
                 nums1 = '[' + str(nums) + ']'
                 driver.find_element_by_xpath(u"(//img[@alt='Комментарии'])" + nums1).click()
-                nums += 1
+                nums += 1 # Псоле успешного перехода на страницу трекера, значение увелчивается для перехода на новую
                 try:
-                    driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click()
-                    driver.back()
+                    driver.find_element_by_xpath(u"//img[@alt='Спасибо']").click() # проверяем не нажата ли кнопка Уже
+                    driver.back() # Если НЕТ, то нажимаем и возвращаемся назад
                 except:
-                    driver.back()
-            driver.find_element_by_link_text(u"След.").click()
+                    driver.back() # Если Уже нажата, значит всё равно возвращаемся
+            driver.find_element_by_link_text(u"След.").click() # По окончанию цикла переключаемся на следующую вкладку
 
     def is_element_present(self, how, what):
         try:
