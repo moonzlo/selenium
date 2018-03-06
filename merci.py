@@ -1,18 +1,16 @@
-﻿from selenium import webdriver
+﻿import time
+from selenium import webdriver
 
 driver = webdriver.Firefox('D:\profile')
-driver.get("https://nnm-club.me/forum/portal.php?c=16&start=1584")
-while True:
+driver.get("https://nnm-club.me/forum/portal.php?c=16&start=1712")
 
-    nums = int(1)
 
-    while nums != 16:  # На странице всего 16 постов, по этому цикл завершается после перебора всех 16ти
+def coments():
+    for i in range(1, 17):
         com = driver.find_element_by_xpath(
-            u"{}{}{}{}".format("(//img[@alt='Комментарии'])", "[", str(nums), "]"))
-
+            u"{}{}{}{}".format("(//img[@alt='Комментарии'])", "[", str(i), "]"))
         com.click()
-        nums += 1  # Псоле успешного перехода на страницу трекера, значение увелчивается для перехода на новую
-
+        time.sleep(2) # Пришлось использовать из-за того что кнопка спасибо не успевала прогрузиться.
         try:
             senks = driver.find_element_by_xpath(u"//img[@alt='Спасибо']")
             senks.click()  # проверяем не нажата ли кнопка Уже
@@ -21,3 +19,9 @@ while True:
             driver.back()  # Если Уже нажата, значит всё равно возвращаемся
 
     driver.find_element_by_link_text(u"След.").click()
+
+def start():
+    for i in range(1, 100): # Количество запусков
+        coments()
+
+start()
