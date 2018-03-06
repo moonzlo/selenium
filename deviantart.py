@@ -1,30 +1,21 @@
-# Автомтазируем процесс раскрутки за счет добавления чужого кала(творчества) в Избранное =)
-# -*- coding: utf-8 -*-
+import time
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import NoAlertPresentException
-import unittest, time, re
+
+options = webdriver.ChromeOptions()
+options.add_argument(r"user-data-dir=C:\Users\moonz\AppData\Local\Google\Chrome")
+driver = webdriver.Chrome(executable_path="C:\\chromedriver.exe", chrome_options=options)
+driver.get("https://www.deviantart.com/newest/")
 
 
-class UntitledTestCase(unittest.TestCase):
-    def setUp(self):
-        self.driver = webdriver.Firefox('D:\profile')
-        self.driver.implicitly_wait(10)
+def coments():
+    for i in range(2, 100):
+        try:
+            a = driver.find_element_by_xpath(
+                "{}{}{}".format("// div[ @ id = 'page-1-results'] / span[", str(i), "] / a / span")).click()
+            time.sleep(4)
+            a.click()
+        except:
+            continue
 
 
-    def test_untitled_test_case(self):
-        driver = self.driver
-        driver.get("https://www.deviantart.com/newest/")
-        driver.find_element_by_xpath("//div[@id='page-1-results']/span/a/span").click()
-        driver.find_element_by_xpath("//div[@id='page-1-results']/span[2]/a/span").click()
-        driver.find_element_by_xpath("//div[@id='page-1-results']/span[3]/a/span").click()
-        driver.find_element_by_xpath("//div[@id='page-1-results']/span[4]/a/span").click()
-
-
-
-
-if __name__ == "__main__":
-    unittest.main()
+coments()
