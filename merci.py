@@ -1,10 +1,10 @@
 import time
 from selenium import webdriver
 
-driver = webdriver.Chrome()
-driver.get("https://nnm-club.me/forum/portal.php?c=16&start=1712")
-time.sleep(60)
-driver.get("https://nnm-club.me/forum/portal.php?c=1&start=784")
+options = webdriver.ChromeOptions()
+options.add_argument(r"user-data-dir=C:\Users\moonz\AppData\Local\Google\Chrome")
+driver = webdriver.Chrome(executable_path="C:\\chromedriver.exe", chrome_options=options)
+driver.get("https://nnm-club.me/forum/portal.php?c=2")
 
 
 def coments():
