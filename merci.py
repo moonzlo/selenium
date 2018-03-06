@@ -1,8 +1,10 @@
-﻿import time
+import time
 from selenium import webdriver
 
-driver = webdriver.Firefox('D:\profile')
+driver = webdriver.Chrome()
 driver.get("https://nnm-club.me/forum/portal.php?c=16&start=1712")
+time.sleep(60)
+driver.get("https://nnm-club.me/forum/portal.php?c=1&start=784")
 
 
 def coments():
@@ -10,7 +12,7 @@ def coments():
         com = driver.find_element_by_xpath(
             u"{}{}{}{}".format("(//img[@alt='Комментарии'])", "[", str(i), "]"))
         com.click()
-        time.sleep(2) # Пришлось использовать из-за того что кнопка спасибо не успевала прогрузиться.
+        time.sleep(1)  # Пришлось использовать из-за того что кнопка спасибо не успевала прогрузиться.
         try:
             senks = driver.find_element_by_xpath(u"//img[@alt='Спасибо']")
             senks.click()  # проверяем не нажата ли кнопка Уже
@@ -20,8 +22,10 @@ def coments():
 
     driver.find_element_by_link_text(u"След.").click()
 
+
 def start():
-    for i in range(1, 100): # Количество запусков
+    for i in range(1, 100):  # Количество запусков
         coments()
+
 
 start()
