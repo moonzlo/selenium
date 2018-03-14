@@ -7,7 +7,7 @@ driver = webdriver.Chrome(executable_path="C:\\chromedriver.exe", chrome_options
 driver.get("https://www.deviantart.com/newest/")
 
 
-def coments():
+def coments():  # Клик на звёзжочку
     for i in range(2, 100):
         try:
             a = driver.find_element_by_xpath(
