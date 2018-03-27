@@ -4,7 +4,7 @@ import time
 from selenium import webdriver
 
 options = webdriver.ChromeOptions()
-options.add_argument('headless')  # Запускаем браузер бещ GUI (без графической оболочки)
+options.add_argument('headless')  # Запускаем браузер без GUI (без графической оболочки)
 options.add_argument(r"user-data-dir=C:\Users\moonz\AppData\Local\Google\Chrome",)
 driver = webdriver.Chrome(executable_path="C:\\chromedriver.exe", chrome_options=options)
 
