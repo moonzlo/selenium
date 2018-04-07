@@ -12,21 +12,22 @@ driver = webdriver.Chrome(executable_path="C:\\chromedriver.exe", chrome_options
 
 
 def coments():  # Клик на звёзжочку
-    driver.get("https://www.deviantart.com/newest/")
-    try:
-        time.sleep(2)
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2)
-        cliking = driver.find_elements_by_xpath("//span[@class='saved-faved-corner']")
-        for i in cliking:
-            try:
-                # Сон это обязательная часть работы скрипта, его нельзя торогать.
-                time.sleep(2)
-                i.click()
-                time.sleep(2)
-            except:
-                continue
 
+    try:
+        for i in range(1, 10):
+            # В начале каждого цикла будем переходить на страницу что бы получить Свежиую выдачу.
+            driver.get("https://www.deviantart.com/newest/")
+            time.sleep(2)
+            cliking = driver.find_elements_by_xpath("//span[@class='saved-faved-corner']")
+            for i in cliking:
+                try:
+                    # Сон это обязательная часть работы скрипта, его нельзя торогать.
+                    time.sleep(2)
+                    i.click()
+                    time.sleep(2)
+                except:
+                    continue
+        time.sleep(10)  # Ждем загрузки новых работ.
     except:
         print('Ошибка')
     finally:
