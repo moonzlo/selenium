@@ -8,11 +8,11 @@ import re
 
 
 options = webdriver.ChromeOptions()
-options.add_argument(r"user-data-dir=C:\Users\moonz\AppData\Local\Google\Chrome")
-driver = webdriver.Chrome(executable_path="C:\\chromedriver.exe", chrome_options=options)
+options.add_argument(r"user-data-dir=D:\Chrome")
+driver = webdriver.Chrome(executable_path="C:\chromedriver.exe", chrome_options=options)
 
-driver.get("https://wikium.ru/challenge/3762/play")  # Переходим на страницу с игрой.
-time.sleep(2)  # Ожидаем загрузку страницы
+driver.get("https://wikium.ru/challenge/3777/play")  # Переходим на страницу с игрой.
+time.sleep(2) # Ожидаем загрузку страницы
 
 
 def findNums():
@@ -33,21 +33,21 @@ def findNums():
         # Ждём таймер 3 секунды для загрузки задания.
 
         for i in range(1, 40):
-            time.sleep(1.4)
+            time.sleep(1.5)
             try:
                 a = driver.find_element_by_xpath("//p").text
                 # b = a.split()
                 nums = re.findall(pattern, str(a))
-                summ = int(0)
-                for i in nums:
-                    summ += int(i)
+
+                from functools import reduce
+                sum_all = reduce(lambda x, y: int(x) + int(y), nums)
+                print(sum_all)
 
                 zadacha = driver.find_elements_by_xpath("//span[@class='game-math__item-inner ng-binding']")
 
                 for i in zadacha:
                     try:
-                        print(i.text)
-                        if i.text == str(summ):
+                        if i.text == str(sum_all):
                             i.click()
                     except:
                         continue
