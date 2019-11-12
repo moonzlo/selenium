@@ -1,44 +1,95 @@
-import time
+from contextlib import contextmanager
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
 
-options = webdriver.ChromeOptions()
-options.add_argument(r"user-data-dir=C:\chromeDriver")
-driver = webdriver.Chrome(executable_path="C:\\chromeDriver\chromedriver.exe", chrome_options=options)
-driver.get("https://nnm-club.me/forum/portal.php?c=10")
-
-
-def coments():
-
-    for i in range(1, 17):
-        time.sleep(1)
-        print('Подождали')
-        driver.find_element_by_xpath(u"(.//*[normalize-space(text()) and normalize-space(.)"
-                                           u"='Продолжительность'])[{}]/following::img[1]".format(str(i))).click()
-
-        time.sleep(1)  # Пришлось использовать из-за того что кнопка спасибо не успевала прогрузиться.
-        try:
-            senks = driver.find_element_by_xpath(u"//img[@alt='Спасибо']")
-            senks.click()  # проверяем не нажата ли кнопка Уже
-            driver.back()  # Если НЕТ, то нажимаем и возвращаемся назад
-        except Exception as errors:
-            print('Ошибка', errors)
-            driver.back()  # Если Уже нажата, значит всё равно возвращаемся
+from selenium.webdriver import ActionChains
+import time
 
 
-    driver.find_element_by_link_text(u"След.").click()
+@contextmanager
+def selen(driver_patch: str, profile_patch: str, config='windows') -> webdriver.Chrome:
+    """
+    Самый удобный метод использования веб драйвера =)
+    :param driver_patch: str: patch to chromedriver(exe)
+    :param profile_patch: str: the path to the folder storing cookies
+    :param config: str: operating system
+    :return: webdriver.Chrome
+    """
 
+    def windows_conf():
+        options = webdriver.ChromeOptions()
+        options.add_argument(f'user-data-dir={profile_patch}')
+        driver = webdriver.Chrome(executable_path=driver_patch, chrome_options=options)
+        return driver
 
-def start():
+    def linux_conf():
+        options = webdriver.ChromeOptions()
+        arguments = ('headless', '--no-sandbox', '--disable-dev-shm-usage', f'user-data-dir={profile_patch}')
+        for option in arguments:
+            options.add_argument(option)
+
+        driver = webdriver.Chrome(executable_path=driver_patch, chrome_options=options)
+        return driver
+
+    configs = {'windows': windows_conf, 'linux': linux_conf}
+    web_driver = configs.get(config)()
+
     try:
-        for i in range(1, 100):  # Количество запусков
-            coments()
+        yield web_driver
+        web_driver.close()
+        time.sleep(1)
+        web_driver.quit()
+
     except Exception as error:
-        print(error)
-    finally:
-        driver.close()
-        time.sleep(2)
-        driver.quit()
-        time.sleep(2)
+        web_driver.close()
+        time.sleep(1)
+        web_driver.quit()
+        raise Exception(error)
 
 
-start()
+with selen(r'C:\chromedriver.exe', 'C:\profile') as browser:
+    # Стартовая страница
+    browser.get('http://nnmclub.to/forum/portal.php?c=10')
+
+    def get_all_posts_page() -> list:
+        # Получаем все ссылки на посты внутри одной страницы.
+
+        p = browser.find_elements_by_xpath('//a[@class="pcomm tit-b bold"]')
+        posts = []
+
+        for i in p:
+            posts.append(i.get_attribute("href"))
+
+        # Переход на следующую страницу
+        browser.find_element_by_link_text(u"След.").click()
+        return posts
+
+
+    def scrapy_links(iter:int) -> list:
+        # Принимаем число страниц которые нужно собрать, отадёт список ссылок.
+        good_list = []
+        for page in range(iter):
+            good_list.extend(get_all_posts_page())
+
+        return good_list
+
+
+    def thanks():
+        # Ищет на странице кнопку спасибо, если она есть и не нажата то нажимает.
+
+        try:
+            bottom = browser.find_element_by_xpath(u"//img[@alt='Спасибо']")
+            bottom.click()
+
+        except NoSuchElementException:
+            pass
+
+
+    def main():
+        all_link = scrapy_links(10)
+        for i in all_link:
+            browser.get(i)
+            thanks()
+
+    main()
